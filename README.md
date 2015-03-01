@@ -18,6 +18,7 @@ Add hamsterpack as a subdir:
     subdirs(hamsterpack)
 
 After that you can include hamsterpack.h in your program, after which you have access to these functions:
+    
     //Has to be run first. Returns true if stuff works.
     HamsterPack::init();
     //Reads file into result, returns true if succeeded.
