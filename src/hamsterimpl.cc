@@ -35,7 +35,7 @@ void HamsterPack::exit(){
     mz_zip_reader_end(&zip_archive);
 }
 
-bool HamsterPack::readFile(const string& filename, vector<char>& data){
+bool HamsterPack::loadFile(const string& filename, vector<char>& data){
     if(!sInited){
         return false;
     }
@@ -54,7 +54,7 @@ bool HamsterPack::readFile(const string& filename, vector<char>& data){
 
 bool HamsterPack::loadString(const string& filename, string& result){
     vector<char> data;
-    bool res = readFile(filename, data);
+    bool res = loadFile(filename, data);
     if(res){
         result = string(data.data());
         return true;

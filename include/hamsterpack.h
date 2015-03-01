@@ -20,6 +20,6 @@ private:
 public:
     static bool init();
     static void exit();
-    static bool readFile(const string& filename, vector<char>& data);
+    static bool loadFile(const string& filename, vector<char>& data);
     static bool loadString(const string& filename, string& result);
 };
