@@ -16,7 +16,7 @@ bool readFileIntoVector(string path, vector<char>& result){
     streamsize size = file.tellg();
     file.seekg(0, ios::beg);
 
-    if(size == -1){
+    if(size <= 0){
         file.close();
         return false;
     }
