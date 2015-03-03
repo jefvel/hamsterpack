@@ -43,7 +43,7 @@ bool HamsterPack::loadString(const string& filename, string& result){
     vector<unsigned char> data;
     bool res = loadFile(filename, data);
     if(res){
-        result = string((char*)data.data(), data.size() - 2);
+        result = string((char*)data.data(), data.size() - 1);
         return true;
     }
     return false;
