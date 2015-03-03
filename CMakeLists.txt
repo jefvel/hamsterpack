@@ -2,6 +2,7 @@ set(parentproject ${PROJECT_NAME})
 
 if(parentproject)
     set(HAM_OUT_FILE ${PROJECT_SOURCE_DIR}/hamstertrash/hamsterdata.cc)
+    set(HAM_OUT_DIR ${PROJECT_SOURCE_DIR}/hamstertrash)
 endif()
 
 project(hamsterpack)
@@ -25,6 +26,7 @@ set_target_properties(hamsterpack
 if(parentproject)
     #Create dummy source file
     if(NOT EXISTS(${HAM_OUT_FILE}))
+        FILE(REMOVE ${HAM_OUT_DIR}/hamsterdata.cc.zip)
         FILE(WRITE ${HAM_OUT_FILE})
     endif()
 
