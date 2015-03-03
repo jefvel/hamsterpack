@@ -7,11 +7,13 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/modu
 
 
 #add_definitions(-Os)
-add_executable(hamstertest main.cc hamsterfile.cc)
-
-#Add hamsterpack stuff
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
-subdirs(${CMAKE_CURRENT_SOURCE_DIR}/..)
+add_executable(hamstertest main.cc)
 
 set(HAM_IN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
-find_package(HamsterPack)
+
+#Add hamsterpack stuff
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. trash)
+include_directories(${HAMSTER_INCLUDE_FILES})
+target_link_libraries(hamstertest ${HAMSTER_LIBS})
+
+#find_package(HamsterPack)

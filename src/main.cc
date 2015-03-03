@@ -24,7 +24,7 @@ bool readFileIntoVector(string path, vector<char>& result){
         return false;
     }
 
-    result = vector<char>(size);
+    result = vector<char>((unsigned int)size);
 
     if(file.read(result.data(), size)){
         file.close();
@@ -86,7 +86,7 @@ bool processDirectory(string input, string output){
     zipfile.append(".zip");
 
     if(tinydir_open(&dir, input.c_str()) == -1){
-        cout<<"Could not open dir.\n";
+        cout<<"Could not open dir."<<endl;
         return false;
     }
 
@@ -98,7 +98,7 @@ bool processDirectory(string input, string output){
     while(dir.has_next){
         tinydir_file file;
         if(tinydir_readfile(&dir, &file) == -1){
-            cout<<"Could not read file.\n";
+            cout<<"Could not read file."<<endl;
             continue;
         }
 
@@ -123,23 +123,11 @@ bool processDirectory(string input, string output){
     for(unsigned int i = 0; i < dirs.size(); i++){
         processDirectory(dirs[i], output);
     }
+
+    return true;
 }
 
 bool createArchive(string input, string output){
-    remove(output.c_str());
-
-    //Create sample file.
-    ofstream outfile;
-    outfile.open(output.c_str());
-
-    vector<char> headercontent;
-    readFileIntoVector("src/hamsterimpl.cc", headercontent);
-
-    outfile<<headercontent.data();
-
-
-    outfile.close();
-
     string zipfile = output;
     zipfile.append(".zip");
     remove(zipfile.c_str());
@@ -148,11 +136,13 @@ bool createArchive(string input, string output){
     relativeDir = "";
 
     processDirectory(input, output);
+	
+	return true;
 }
 
 int writtenbytes;
 char const hex_chars[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-void writeBuffer(const char* buf, const size_t length,  ofstream& out){
+inline void writeBuffer(const char* buf, const size_t length,  ofstream& out){
     for(unsigned int i = 0; i < length; i ++){
         char const b = buf[i];
         out<<"0x"
@@ -161,32 +151,38 @@ void writeBuffer(const char* buf, const size_t length,  ofstream& out){
            <<",";
         writtenbytes ++;
         if(writtenbytes % 15 == 0) {
-            out<<"\n";
+            out<<endl;
         }
     }
 }
 
-void writeHeader(string path){
+void writeHamsterFile(string path){
+    remove(path.c_str());
+
+    ofstream outfile;
+    outfile.open(path.c_str(), ios::binary);
+    outfile<<"#include \"hamsterpack.h\""<<endl;
+
     writtenbytes = 0;
     string zipfile = path;
     zipfile.append(".zip");
 
     ifstream infile(zipfile.c_str(), ios::binary);
-    ofstream outfile;
-    outfile.open(path.c_str(), ios::binary | ios::app);
 
-    outfile<<"const char HamsterPack::hamster_data[] = {\n";
-    size_t buf_size = 1024;
+    outfile<<"const unsigned char HamsterPack::hamster_data[] = {"<<endl;
+    const size_t buf_size = 1024;
 
     if(infile.is_open() && outfile.is_open()){
-        char *buffer = new char[buf_size];
-        while(infile.readsome(buffer, buf_size)){
-            writeBuffer(buffer, infile.gcount(), outfile);
+        char buffer[buf_size];
+        while(infile.good()){
+            infile.read(buffer, buf_size);
+            size_t readBytes = (size_t)infile.gcount();
+            writeBuffer(buffer, readBytes, outfile);
         }
     }
 
-    outfile<<"0x00 };\n"
-           <<"const size_t HamsterPack::hamster_size = "<<writtenbytes<<";\n";
+    outfile<<"0x00 };"<<endl
+           <<"const size_t HamsterPack::hamster_size = "<<writtenbytes<<";"<<endl;
     infile.close();
 }
 
@@ -200,18 +196,20 @@ int main(int argc, char** args){
     if(argc != 3){
         std::cout<<"usage: "
             <<args[0]
-            <<" [input dir] [output file]\n";
+            <<" [input dir] [output file]"<<endl;
         return 0;
     }
 
     string input_dir = args[1];
     string out_file = args[2];
 
+	cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
+
     if(input_dir.length() == 0 || out_file.length() == 0){
         return 0;
     }
 
     createArchive(input_dir, out_file);
-    writeHeader(out_file);
+    writeHamsterFile(out_file);
     removeZipFile(out_file);
 }

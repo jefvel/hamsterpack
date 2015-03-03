@@ -12,14 +12,14 @@ using namespace std;
 
 class HamsterPack {
 private:
-    static const char hamster_data[];
+    static const unsigned char hamster_data[];
     static const size_t hamster_size;
 
-    static mz_zip_archive zip_archive;
-    static bool sInited;
+     mz_zip_archive mArchive;
+     bool mInited;
 public:
-    static bool init();
-    static void exit();
-    static bool loadFile(const string& filename, vector<char>& data);
-    static bool loadString(const string& filename, string& result);
+     HamsterPack();
+    ~HamsterPack();
+    bool loadFile(const string& filename, vector<char>& data);
+    bool loadString(const string& filename, string& result);
 };
