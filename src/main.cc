@@ -9,9 +9,6 @@
 
 using namespace std;
 
-string relativeDir;
-string rootDir;
-
 bool readFileIntoVector(string path, vector<char>& result){
     ifstream file;
     file.open(path.c_str(), ios::binary);
@@ -35,6 +32,10 @@ bool readFileIntoVector(string path, vector<char>& result){
     return false;
 }
 
+string relativeDir;
+string rootDir;
+
+///Returns the path name for the current zip dir we are in.
 string getZipPath(){
     string result;
 

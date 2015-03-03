@@ -38,5 +38,4 @@ if(parentproject)
 
     set(HAMSTER_LIBS hamsterdatalib PARENT_SCOPE)
     set(HAMSTER_INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
-
 endif()
