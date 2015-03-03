@@ -8,7 +8,7 @@
 #include "miniz.h"
 
 using namespace std;
-
+namespace HamPack {
 bool readFileIntoVector(string path, vector<char>& result){
     ifstream file;
     file.open(path.c_str(), ios::binary);
@@ -81,10 +81,8 @@ mz_bool addFile(string zipfile, tinydir_file& infile){
             buffer.data(), buffer.size(), NULL, 0, MZ_BEST_COMPRESSION);
 }
 
-bool processDirectory(string input, string output){
+bool processDirectory(string input, string zipfile){
     tinydir_dir dir;
-    string zipfile = output;
-    zipfile.append(".zip");
 
     if(tinydir_open(&dir, input.c_str()) == -1){
         cout<<"Could not open dir."<<endl;
@@ -122,7 +120,7 @@ bool processDirectory(string input, string output){
     tinydir_close(&dir);
 
     for(unsigned int i = 0; i < dirs.size(); i++){
-        processDirectory(dirs[i], output);
+        processDirectory(dirs[i], zipfile);
     }
 
     return true;
@@ -130,13 +128,13 @@ bool processDirectory(string input, string output){
 
 bool createArchive(string input, string output){
     string zipfile = output;
-    zipfile.append(".zip");
+    zipfile.append(".new.zip");
     remove(zipfile.c_str());
 
     rootDir = "";
     relativeDir = "";
 
-    processDirectory(input, output);
+    processDirectory(input, zipfile);
 	
 	return true;
 }
@@ -157,7 +155,97 @@ inline void writeBuffer(const char* buf, const size_t length,  ofstream& out){
     }
 }
 
+bool zipDiffers(string path){
+    string oldPath = path+".zip";
+    string newPath = path+".new.zip";
+    ifstream oldFile(oldPath.c_str(), ios::binary | ios::in);
+
+    streamsize oldSize = 0;
+    streamsize newSize = 0;
+    
+    if(oldFile.is_open()){
+        oldFile.seekg(0, ios::end);
+        oldSize = oldFile.tellg();
+        oldFile.seekg(0, ios::beg);
+    }
+
+    if(oldSize == 0){
+        return true;
+    }
+
+    ifstream newFile(newPath.c_str(), ios::binary | ios::in);
+    if(newFile.is_open()){
+        newFile.seekg(0, ios::end);
+        newSize = newFile.tellg();
+        newFile.seekg(0, ios::beg);
+    }
+
+    return oldSize != newSize;
+
+    if(oldSize != newSize){
+        return true;
+    }
+    
+    const size_t buf_size = 2048;
+    char buf1[buf_size];
+    char buf2[buf_size];
+
+
+    bool differs = false;
+    while(newFile.good() && oldFile.good()){
+        oldFile.read(buf1, buf_size);
+        newFile.read(buf2, buf_size);
+
+        if(memcmp(buf1, buf2, buf_size) != 0){
+            differs = true;
+            break;
+        }
+
+        memset(buf1, 0, buf_size);
+        memset(buf2, 0, buf_size);
+
+    }
+
+    oldFile.close();
+    newFile.close();
+
+    return differs;
+
+}
+
+void replaceOldZip(string path){
+    string oldPath = path+".zip";
+    string newPath = path+".new.zip";
+    ofstream oldZip;
+    ifstream newZip;
+
+    oldZip.open(oldPath.c_str(), ios::binary);
+    newZip.open(newPath.c_str(), ios::binary);
+
+    char buf[1024];
+    while(newZip.good()){
+        newZip.read(buf, 1024);
+        streamsize s = newZip.gcount();
+        oldZip.write(buf, s);
+        if(s == 0){
+            break;
+        }
+    }
+
+    oldZip.close();
+    newZip.close();
+
+    remove(newPath.c_str());
+}
+
 void writeHamsterFile(string path){
+    if(!zipDiffers(path)){
+        cout<<"Data file up to date, no need to rewrite it."<<endl;
+        return;
+    }
+
+    cout<<"Data modified, creating new header"<<endl;
+
     remove(path.c_str());
 
     ofstream outfile;
@@ -166,8 +254,7 @@ void writeHamsterFile(string path){
 
     writtenbytes = 0;
     string zipfile = path;
-    zipfile.append(".zip");
-
+    zipfile.append(".new.zip");
     ifstream infile(zipfile.c_str(), ios::binary);
 
     outfile<<"const unsigned char HamsterPack::hamster_data[] = {"<<endl;
@@ -186,12 +273,7 @@ void writeHamsterFile(string path){
            <<"const size_t HamsterPack::hamster_size = "<<writtenbytes<<";"<<endl;
     infile.close();
 }
-
-void removeZipFile(const string& filepath){
-    string zippath = filepath;
-    zippath.append(".zip");
-    remove(zippath.c_str());
-}
+};
 
 int main(int argc, char** args){
     if(argc != 3){
@@ -204,13 +286,13 @@ int main(int argc, char** args){
     string input_dir = args[1];
     string out_file = args[2];
 
-	cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
+	//cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
 
     if(input_dir.length() == 0 || out_file.length() == 0){
         return 0;
     }
 
-    createArchive(input_dir, out_file);
-    writeHamsterFile(out_file);
-    removeZipFile(out_file);
+    HamPack::createArchive(input_dir, out_file);
+    HamPack::writeHamsterFile(out_file);
+    HamPack::replaceOldZip(out_file);
 }

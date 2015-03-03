@@ -4,6 +4,9 @@
 //////////////////
 //Implementation//
 //////////////////
+typedef unsigned char uint8;
+typedef unsigned short uint16;
+typedef unsigned int uint;
 HamsterPack::HamsterPack(){
     memset(&mArchive, 0, sizeof(mArchive));
     mz_bool status;
@@ -18,7 +21,7 @@ HamsterPack::~HamsterPack(){
     }
 }
 
-bool HamsterPack::loadFile(const string& filename, vector<char>& data){
+bool HamsterPack::loadFile(const string& filename, vector<unsigned char>& data){
     if(!mInited){
         return false;
     }
@@ -28,7 +31,7 @@ bool HamsterPack::loadFile(const string& filename, vector<char>& data){
     p = mz_zip_reader_extract_file_to_heap(&mArchive, filename.c_str(), &size, 0);
 
     if(p != NULL){
-        data = vector<char>(size);
+        data = vector<unsigned char>(size);
         memcpy(data.data(), p, size);
         return true;
     }
@@ -37,10 +40,10 @@ bool HamsterPack::loadFile(const string& filename, vector<char>& data){
 }
 
 bool HamsterPack::loadString(const string& filename, string& result){
-    vector<char> data;
+    vector<unsigned char> data;
     bool res = loadFile(filename, data);
     if(res){
-        result = string(data.data());
+        result = string((char*)data.data());
         return true;
     }
     return false;

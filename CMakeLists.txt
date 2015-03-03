@@ -18,6 +18,10 @@ set(source_files
 include_directories(include)
 add_executable(hamsterpack ${source_files})
 
+set_target_properties(hamsterpack
+    PROPERTIES
+    CMAKE_BUILD_TYPE RELEASE)
+
 if(parentproject)
     #Create dummy source file
     FILE(WRITE ${HAM_OUT_FILE})

@@ -20,6 +20,6 @@ private:
 public:
      HamsterPack();
     ~HamsterPack();
-    bool loadFile(const string& filename, vector<char>& data);
+    bool loadFile(const string& filename, vector<unsigned char>& data);
     bool loadString(const string& filename, string& result);
 };
