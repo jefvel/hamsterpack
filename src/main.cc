@@ -221,10 +221,10 @@ void replaceOldZip(string path){
 
     oldZip.open(oldPath.c_str(), ios::binary);
     newZip.open(newPath.c_str(), ios::binary);
-
-    char buf[1024];
+    const size_t buf_size = 1024 << 1;
+    char buf[buf_size];
     while(newZip.good()){
-        newZip.read(buf, 1024);
+        newZip.read(buf, buf_size);
         streamsize s = newZip.gcount();
         oldZip.write(buf, s);
         if(s == 0){
@@ -258,14 +258,13 @@ void writeHamsterFile(string path){
     ifstream infile(zipfile.c_str(), ios::binary);
 
     outfile<<"const unsigned char HamsterPack::hamster_data[] = {"<<endl;
-    const size_t buf_size = 1024;
+    const size_t buf_size = 1024 << 5;
 
     if(infile.is_open() && outfile.is_open()){
         char buffer[buf_size];
         while(infile.good()){
             infile.read(buffer, buf_size);
-            size_t readBytes = (size_t)infile.gcount();
-            writeBuffer(buffer, readBytes, outfile);
+            writeBuffer(buffer, (size_t)infile.gcount(), outfile);
         }
     }
 
