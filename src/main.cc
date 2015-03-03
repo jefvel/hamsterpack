@@ -286,7 +286,7 @@ int main(int argc, char** args){
     string input_dir = args[1];
     string out_file = args[2];
 
-	//cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
+	cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
 
     if(input_dir.length() == 0 || out_file.length() == 0){
         return 0;

@@ -24,7 +24,9 @@ set_target_properties(hamsterpack
 
 if(parentproject)
     #Create dummy source file
-    FILE(WRITE ${HAM_OUT_FILE})
+    if(NOT EXISTS(${HAM_OUT_FILE}))
+        FILE(WRITE ${HAM_OUT_FILE})
+    endif()
 
     #Adds command that generates hamsterpack header file automatically
     add_custom_target(autopacker ALL
@@ -37,7 +39,7 @@ if(parentproject)
 
     add_library(hamsterdatalib STATIC EXCLUDE_FROM_ALL ${HAM_OUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc)
     set_target_properties(hamsterdatalib PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
     add_dependencies(hamsterdatalib autopacker)
 
     set(HAMSTER_LIBS hamsterdatalib PARENT_SCOPE)
