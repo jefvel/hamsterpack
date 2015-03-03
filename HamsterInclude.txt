@@ -1,7 +1,8 @@
 #Add hamsterpack stuff
-message(hej )
 set(temp_proj_thingy ${CMAKE_PROJECT_NAME})
+
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR} hamstertrash)
 include_directories(${HAMSTER_INCLUDE_FILES})
 target_link_libraries(${temp_proj_thingy} ${HAMSTER_LIBS})
+
 unset(temp_proj_thingy)

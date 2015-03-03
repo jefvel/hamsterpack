@@ -2,10 +2,6 @@ set(parentproject ${PROJECT_NAME})
 
 if(parentproject)
     set(HAM_OUT_FILE ${PROJECT_SOURCE_DIR}/hamsterdata.cc)
-    add_library(hamsterdatalib STATIC EXCLUDE_FROM_ALL  ${HAM_OUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc)
-    set_target_properties(hamsterdatalib PROPERTIES
-        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
-    set(HAMSTER_LIBS hamsterdatalib PARENT_SCOPE)
 endif()
 
 project(hamsterpack)
@@ -22,12 +18,10 @@ set(source_files
 include_directories(include)
 add_executable(hamsterpack ${source_files})
 
-#set(HAMSTER_SOURCE_FILES hamsterpack.cc ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc PARENT_SCOPE)
-set(HAMSTER_INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
-
 if(parentproject)
     #Create dummy source file
     FILE(WRITE ${HAM_OUT_FILE})
+
     #Adds command that generates hamsterpack header file automatically
     add_custom_target(autopacker ALL
         COMMAND hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE}
@@ -36,10 +30,13 @@ if(parentproject)
         COMMENT "Packing resources..."
         VERBATIM)
     add_dependencies(${parentproject} autopacker)
-endif()
 
-if(parentproject)
+    add_library(hamsterdatalib STATIC EXCLUDE_FROM_ALL ${HAM_OUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc)
+    set_target_properties(hamsterdatalib PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
     add_dependencies(hamsterdatalib autopacker)
-endif()
-message("cmd: " ${CMAKE_CURRENT_SOURCE_DIR}/bin/Debug/hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE})
 
+    set(HAMSTER_LIBS hamsterdatalib PARENT_SCOPE)
+    set(HAMSTER_INCLUDE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/include PARENT_SCOPE)
+
+endif()
