@@ -1,7 +1,7 @@
 set(parentproject ${PROJECT_NAME})
 
 if(parentproject)
-    set(HAM_OUT_FILE ${PROJECT_SOURCE_DIR}/hamsterdata.cc)
+    set(HAM_OUT_FILE ${PROJECT_SOURCE_DIR}/hamstertrash/hamsterdata.cc)
 endif()
 
 project(hamsterpack)
