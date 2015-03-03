@@ -2,7 +2,7 @@ set(parentproject ${PROJECT_NAME})
 
 if(parentproject)
     set(HAM_OUT_FILE ${PROJECT_SOURCE_DIR}/hamsterdata.cc)
-    add_library(hamsterdatalib STATIC ${HAM_OUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc)
+    add_library(hamsterdatalib STATIC EXCLUDE_FROM_ALL  ${HAM_OUT_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/src/hamsterpack.cc)
     set_target_properties(hamsterdatalib PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}) 
     set(HAMSTER_LIBS hamsterdatalib PARENT_SCOPE)
@@ -35,7 +35,6 @@ if(parentproject)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Packing resources..."
         VERBATIM)
-
     add_dependencies(${parentproject} autopacker)
 endif()
 

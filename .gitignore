@@ -1,6 +1,10 @@
 hamsterfile.cc
 # Created by https://www.gitignore.io
 
+*.sln
+*.filters
+*.vcxproj
+
 ### Vim ###
 [._]*.s[a-w][a-z]
 [._]s[a-w][a-z]
