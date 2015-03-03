@@ -30,7 +30,7 @@ if(parentproject)
     FILE(WRITE ${HAM_OUT_FILE})
     #Adds command that generates hamsterpack header file automatically
     add_custom_target(autopacker ALL
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/bin/Debug/hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE}
+        COMMAND hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE}
         DEPENDS hamsterpack
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
         COMMENT "Packing resources..."
