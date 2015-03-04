@@ -9,6 +9,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake/modu
 add_executable(hamstertest main.cc)
 
 #Set data dir
-set(HAM_IN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
+set(HAM_IN_DIR data)
 include(../HamsterInclude.txt)
 
