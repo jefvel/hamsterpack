@@ -1,8 +1,14 @@
 # HamsterPack
 Packs zipped directory into executable, which then can be read out of.
 
+Uses these libs
+---------------
+* [miniz](http://code.google.com/p/miniz/)
+* [tinydir](https://github.com/cxong/tinydir)
+
+
 #Usage
-To use hamsterpack, modify your CMakeLists with this:
+To use hamsterpack, simply add this to your CMakeLists.txt:
 
     #Set data dir to embed (defaults to data, so setting it is optional)
     set(HAM_IN_DIR data)
