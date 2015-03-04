@@ -4,8 +4,8 @@ Packs zipped directory into executable, which then can be read out of.
 #Usage
 To use hamsterpack, modify your CMakeLists with this:
 
-    #Set data dir to embed
-    set(HAM_IN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/data)
+    #Set data dir to embed (defaults to data)
+    set(HAM_IN_DIR data)
     #change path_to_hamsterpack to where you put it
     include([path_to_hamsterpack]/HamsterInclude.txt)
 

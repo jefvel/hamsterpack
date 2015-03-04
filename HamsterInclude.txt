@@ -1,6 +1,10 @@
 #Define paths
 set(HAM_OUT_DIR  ${PROJECT_SOURCE_DIR}/hamsterpack)
 
+if(NOT HAM_IN_DIR)
+	set(HAM_IN_DIR data)
+endif()
+
 #Add hamsterpack stuff
 set(temp_proj_thingy ${CMAKE_PROJECT_NAME})
 
