@@ -32,7 +32,7 @@ bool HamsterPack::loadFile(const string& filename, vector<unsigned char>& data){
 
     if(p != NULL){
         data = vector<unsigned char>(size);
-        memcpy(data.data(), p, size);
+        memcpy(&data[0], p, size);
         return true;
     }
 
@@ -43,7 +43,7 @@ bool HamsterPack::loadString(const string& filename, string& result){
     vector<unsigned char> data;
     bool res = loadFile(filename, data);
     if(res){
-        result = string((char*)data.data(), data.size() - 1);
+        result = string((char*)&data[0], data.size() - 1);
         return true;
     }
     return false;

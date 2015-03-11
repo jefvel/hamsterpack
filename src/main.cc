@@ -23,7 +23,7 @@ bool readFileIntoVector(string path, vector<char>& result){
 
     result = vector<char>((unsigned int)size);
 
-    if(file.read(result.data(), size)){
+    if(file.read(&result[0], size)){
         file.close();
         return true;
     }
@@ -78,7 +78,7 @@ mz_bool addFile(string zipfile, tinydir_file& infile){
     return mz_zip_add_mem_to_archive_file_in_place(
             zipfile.c_str(),
             name.c_str(),
-            buffer.data(), buffer.size(), NULL, 0, MZ_BEST_COMPRESSION);
+            &buffer[0], buffer.size(), NULL, 0, MZ_BEST_COMPRESSION);
 }
 
 bool processDirectory(string input, string zipfile){

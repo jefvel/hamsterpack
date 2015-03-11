@@ -1,7 +1,7 @@
 hamsterdata.cc
 hamstertrash
 test/hamsterpack
-
+*.vcproj
 # Created by https://www.gitignore.io
 
 *.sln
