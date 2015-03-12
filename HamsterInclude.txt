@@ -1,5 +1,5 @@
 #Define paths
-set(HAM_OUT_DIR  ${PROJECT_SOURCE_DIR}/hamsterpack)
+set(HAM_OUT_DIR  ${PROJECT_BINARY_DIR}/hamsterpack)
 
 if(NOT HAM_IN_DIR)
 	set(HAM_IN_DIR data)
