@@ -33,7 +33,7 @@ if(parentproject)
 
     #Adds command that generates hamsterpack header file automatically
     add_custom_target(autopacker ALL
-        COMMAND hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE}
+        COMMAND hamsterpack ${HAM_IN_DIR} ${HAM_OUT_FILE} ${HAM_FLAGS}
         DEPENDS hamsterpack
         WORKING_DIRECTORY ${parentpath}
         COMMENT "Packing resources..."

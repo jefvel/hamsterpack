@@ -238,8 +238,10 @@ void replaceOldZip(string path){
     remove(newPath.c_str());
 }
 
+bool forceUpdate = false;
+
 void writeHamsterFile(string path){
-    if(!zipDiffers(path)){
+    if(!zipDiffers(path) && !forceUpdate){
         cout<<"Data file up to date, no need to rewrite it."<<endl;
         return;
     }
@@ -275,15 +277,22 @@ void writeHamsterFile(string path){
 };
 
 int main(int argc, char** args){
-    if(argc != 3){
+    if(argc < 3){
         std::cout<<"usage: "
             <<args[0]
-            <<" [input dir] [output file]"<<endl;
+            <<" [input dir] [output file] FORCE"<<endl;
         return 0;
     }
 
     string input_dir = args[1];
     string out_file = args[2];
+
+	if(argc > 3){
+		if(std::string(args[3]) == "FORCE"){
+			HamPack::forceUpdate = true;
+			cout<<"Forcing update of zip file\n";
+		}
+	}
 
 	cout<<"Processing dir "<<input_dir<<" into file "<<out_file<<endl;
 
