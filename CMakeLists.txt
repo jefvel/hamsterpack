@@ -22,7 +22,11 @@ set_target_properties(hamsterpack
     CMAKE_BUILD_TYPE RELEASE)
 
 if(parentproject)
-    set(HAM_OUT_DIR ${parentpath}/hamsterpack)
+    if(NOT HAM_OUT_DIR)
+        set(HAM_OUT_DIR ${parentpath})
+    endif()
+
+    set(HAM_OUT_DIR ${HAM_OUT_DIR}/hamsterpack)
     set(HAM_OUT_FILE ${HAM_OUT_DIR}/hamsterdata.cc)
 
     #Create dummy source file
